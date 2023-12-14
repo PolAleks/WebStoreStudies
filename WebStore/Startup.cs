@@ -1,24 +1,43 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebStore
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        /// <summary>
+        /// Свойство для хранения конфигурации
+        /// </summary>
+        private IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration Configuration)
         {
+            this.Configuration = Configuration;
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // Метод вызывается средой ASP.NET.
+
+        /// <summary>
+        /// Метод подключения сервисов
+        /// </summary>
+        /// <param name="services">Коллекция сервисов</param>
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // Подключаем инфраструктуру MVC 
+            services.AddControllersWithViews();
+        }
+
+        // Метод вызывается средой ASP.NET.
+        
+        /// <summary>
+        /// Метод конфигурации подключенных сервисов и настройки конвеера запросов
+        /// </summary>
+        /// <param name="app">Построитель приложения</param>
+        /// <param name="env">Окружение хоста</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -26,14 +45,23 @@ namespace WebStore
                 app.UseDeveloperExceptionPage();
             }
 
+            // Подключаем в конвеер обработку статических файлов
+            app.UseStaticFiles();
+
+            app.UseDefaultFiles();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.MapGet("/greetings", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    await context.Response.WriteAsync(Configuration["CustomGreetings"]);
                 });
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"); // Эквивалентно http://localhost:5000/Home/Index/id
             });
         }
     }
