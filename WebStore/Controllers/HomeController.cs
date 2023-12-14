@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using WebStore.Models;
 
 namespace WebStore.Controllers
@@ -23,9 +24,28 @@ namespace WebStore.Controllers
             return View();
         }
 
+
+        /// <summary>
+        /// Метод отображения всех сотрудников
+        /// </summary>
         public IActionResult Employees()
         {
             return View(_employees);
+        }
+
+        /// <summary>
+        /// Метод отображения данных одного сотрудника
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult Employee(int id)
+        {
+            var employee = _employees.FirstOrDefault(emp => emp.Id == id);
+            
+            if (employee is null) 
+                return NotFound();
+
+            return View(employee);
         }
     }
 }
