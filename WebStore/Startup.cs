@@ -27,6 +27,8 @@ namespace WebStore
         /// <param name="services">Коллекция сервисов</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            // Подключаем инфраструктуру MVC 
+            services.AddControllersWithViews();
         }
 
         // Метод вызывается средой ASP.NET.
@@ -52,10 +54,14 @@ namespace WebStore
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.MapGet("/greetings", async context =>
                 {
                     await context.Response.WriteAsync(Configuration["CustomGreetings"]);
                 });
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"); // Эквивалентно http://localhost:5000/Home/Index/id
             });
         }
     }
