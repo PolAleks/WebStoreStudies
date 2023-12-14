@@ -43,6 +43,11 @@ namespace WebStore
                 app.UseDeveloperExceptionPage();
             }
 
+            // Подключаем в конвеер обработку статических файлов
+            app.UseStaticFiles();
+
+            app.UseDefaultFiles();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
