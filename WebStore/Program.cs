@@ -11,16 +11,22 @@ namespace WebStore
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        public static void Main(string[] args) =>
+            CreateHostBuilder(args)
+            .Build()
+            .Run();
 
+
+        /// <summary>
+        /// Метод постороения хоста
+        /// </summary>
+        /// <param name="args">Набор параметров для конфигурирования хоста</param>
+        /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>(); // Конфигурирование хоста с помощью класса Startup
                 });
     }
 }
