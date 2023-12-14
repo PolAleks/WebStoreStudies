@@ -45,11 +45,14 @@ namespace WebStore
 
             app.UseRouting();
 
+            // —читываем параметр из конфигурации
+            var greetings = Configuration["CustomGreetings"];
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    await context.Response.WriteAsync(greetings);
                 });
             });
         }
